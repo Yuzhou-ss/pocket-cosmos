@@ -31,6 +31,10 @@ export default defineConfig({
       '/intf':{
         target: 'http://wp.birdpaper.com.cn/', // localhost=>target
         changeOrigin: true
+      },
+      '/apiShou':{
+        target: 'http://pv.sohu.com/', // localhost=>target
+        changeOrigin: true
       }
     }
   }

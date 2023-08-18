@@ -1,5 +1,7 @@
 import { get } from "./ortherHttp";
 import { bgTypeIndexList } from "@/views/home/bg";
+
+
 export const getCategory = () => get("/intf/getCategory", {});
 
 export const getRandomBg = () => {
@@ -24,3 +26,5 @@ export const searchBgByKeyword = (keyword: string) => {
   let random = Math.floor(Math.random() * 500 + 1);
   return get(`/intf/search?content=${keyword}&pageno=${random}&count=1`, {});
 };
+
+export const getIp = () => get("/apiSohu/cityjson?ie=utf-8",{})

@@ -17,6 +17,9 @@ import { useRouter } from "vue-router";
 import { commandList } from "./commandList";
 import moment from "moment";
 import { type msgType } from "./type";
+import { getIpInfo } from "@/utils/getIp";
+import { insertAccess } from "@/api";
+import "@/utils/console"
 
 const router = useRouter();
 let goLoginBtn;
@@ -61,7 +64,18 @@ onMounted(() => {
   goLoginBtn?.addEventListener("click", () => {
     router.push("/");
   });
+
+  const ipInfo = getIpInfo()
+  insertAccessRecord(ipInfo)
 });
+
+const insertAccessRecord = async (params:any)=>{
+  try{
+    const res = await insertAccess(params)
+  }catch(err){
+    console.error(err)
+  }
+}
 
 const onExecCmd = (
   key: string,
@@ -109,7 +123,6 @@ const onExecCmd = (
         background-color: rgba(100, 100, 100, 0.5) !important;
         .t-log-box{
           color: #fff;
-          mix-blend-mode:difference
         }
         .t-cmd-line-content {
           font-size: 14px;
