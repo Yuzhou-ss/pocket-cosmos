@@ -46,7 +46,11 @@ export function post(url:string, params:any){
         api.post(url, {
             params:params
         }).then(res => {
+          if(res){
             resolve(res.data)
+          }else{
+            reject()
+          }
         }).catch(err=>{
             reject(err)
         })

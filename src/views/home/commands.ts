@@ -158,24 +158,28 @@ export const commands: commandType[] = [
             autoReview: true,
             isPassword: true,
             callback: async (password: string) => {
-              success({
+              Terminal.$api.pushMessage("my-terminal", {
                 type: "normal",
                 class: "system",
                 tag: "waiting",
                 content: "Logging in...",
-              });
-              const result: any = await loginRequest({ username, password });
-              if (result.status === 1) {
-                localStorage.setItem("username", result.data.username);
-                localStorage.setItem("nickname", result.data.nickname);
-                success({
-                  type: "normal",
-                  class: "success",
-                  tag: "success",
-                  content: `Login succeeded! Welcome, ${result.data.nickname}.`,
-                });
-              } else {
-                failed("Login failed!");
+              })
+              try{
+                const result: any = await loginRequest({ username, password });
+                if (result.status === 1) {
+                  localStorage.setItem("username", result.data.username);
+                  localStorage.setItem("nickname", result.data.nickname);
+                  success({
+                    type: "normal",
+                    class: "success",
+                    tag: "success",
+                    content: `Login succeeded! Welcome, ${result.data.nickname}.`,
+                  });
+                } else {
+                  failed("Login failed!");
+                }
+              }catch{
+                failed("Something wrong!")
               }
               asker.finish();
             },

@@ -62,7 +62,7 @@ onMounted(() => {
   }
   goLoginBtn = document.getElementById("goLoginBtn");
   goLoginBtn?.addEventListener("click", () => {
-    router.push("/");
+    router.push("/login");
   });
 
   const ipInfo = getIpInfo()
