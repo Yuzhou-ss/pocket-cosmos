@@ -1,10 +1,18 @@
 import Terminal from "vue-web-terminal";
 import { loginRequest, setBgImage } from "@/api";
-import { bgTypeList, bgTypeListObj, bgTypeListArr } from "./bg";
-import { getRandomBg, getRandomBgByType } from "@/api/orther/index";
-const app = document.getElementById("app");
+import { bgTypeListObj, bgTypeListArr } from "./bg";
+import {
+  getRandomBg,
+  getRandomBgByType,
+  searchBgByKeyword,
+} from "@/api/orther/index";
 import { type commandType } from "./type";
+import moment from "moment";
+
+const app = document.getElementById("app");
+
 export const commands: commandType[] = [
+  // 百度搜索
   {
     key: "百度",
     callback: (input: string, success: Function, failed: Function) => {
@@ -37,6 +45,7 @@ export const commands: commandType[] = [
       });
     },
   },
+  // 哔哩哔哩搜索
   {
     key: "bilibili",
     callback: (input: string, success: Function, failed: Function) => {
@@ -69,6 +78,7 @@ export const commands: commandType[] = [
       });
     },
   },
+  // CSDN搜索
   {
     key: "csdn",
     callback: (input: string, success: Function, failed: Function) => {
@@ -85,7 +95,7 @@ export const commands: commandType[] = [
       });
     },
   },
-
+  // 翻译
   {
     key: "翻译",
     callback: (input: string, success: Function, failed: Function) => {
@@ -108,7 +118,7 @@ export const commands: commandType[] = [
       });
     },
   },
-
+  // 翻译
   {
     key: "translate",
     callback: (input: string, success: Function, failed: Function) => {
@@ -131,6 +141,7 @@ export const commands: commandType[] = [
       });
     },
   },
+  // 登录
   {
     key: "login",
     callback: (input: string, success: Function, failed: Function) => {
@@ -173,6 +184,7 @@ export const commands: commandType[] = [
       });
     },
   },
+  // 退出登录
   {
     key: "logout",
     callback: (input: string, success: Function, failed: Function) => {
@@ -200,6 +212,7 @@ export const commands: commandType[] = [
       });
     },
   },
+  // 更换壁纸相关
   {
     key: "bg",
     callback: async (input: string, success: Function, failed: Function) => {
@@ -220,7 +233,7 @@ export const commands: commandType[] = [
           content: `Loading ...`,
         });
         const result: any = await getRandomBg();
-        if (result.errno == 0 && result.data.list[0].url) {
+        if (result.errno == 0 && result.data.list.length === 1) {
           app?.setAttribute(
             "style",
             `background-image:url(${result.data.list[0].url})`
@@ -248,7 +261,7 @@ export const commands: commandType[] = [
             : type[0].replace(/\s*/g, "");
         const typeId = bgTypeListObj.get(bgType.toLocaleUpperCase());
         const result: any = await getRandomBgByType(typeId);
-        if (result.errno == 0 && result.data.list[0].url) {
+        if (result.errno == 0 && result.data.list.length === 1) {
           app?.setAttribute(
             "style",
             `background-image:url(${result.data.list[0].url})`
@@ -287,6 +300,90 @@ export const commands: commandType[] = [
           });
         }
       }
+      // 搜索
+      if (input.includes("-s")) {
+        let message = {
+          class: "info",
+          content: "Searching ...",
+        };
+        Terminal.$api.pushMessage("my-terminal", message);
+        let splitInput: Array<string> = input.split("-t");
+        const keyword: string =
+          splitInput[0] == ""
+            ? splitInput[1].replace(/\s*/g, "")
+            : splitInput[0].replace(/\s*/g, "");
+        const result: any = await searchBgByKeyword(keyword);
+        if (result.errno == 0 && result.data.list.length === 1) {
+          app?.setAttribute(
+            "style",
+            `background-image:url(${result.data.list[0].url})`
+          );
+          return success({
+            type: "normal",
+            class: "success",
+            tag: "success",
+            content: `Wallpaper changged!`,
+          });
+        }
+      }
+
+      return success({
+        type: "normal",
+        class: "error",
+        tag: "error",
+        content: `Something wrong!`,
+      });
+    },
+  },
+  // 介绍
+  {
+    key: "intro",
+    callback: (input: string, success: Function, failed: Function) => {
+      if (input === "intro") {
+        let messages = [
+          {
+            type: "normal",
+            class: "info",
+            tag: "System",
+            content: `Welcome to vue web terminal! Current access time <span style="color:rgb(0,255,255);font-weight:1000"> ${moment().format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} </span>.`,
+          },
+          {
+            type: "normal",
+            class: "warning",
+            tag: "Attention",
+            content: `If you feel that the practicality of this project is not strong, please <span style="color:rgb(0,255,255);font-weight:1000"> be merciful under the tongue </span>.`,
+          },
+          {
+            type: "normal",
+            class: "warning",
+            tag: "Becsuse",
+            content:
+              "I just thought it was very interesting, so I did it to practice.",
+          },
+          {
+            type: "normal",
+            class: "info",
+            tag: "Author",
+            content: "温粥客",
+          },
+          {
+            type: "normal",
+            class: "info",
+            tag: "Birthday",
+            content: "1999-09",
+          },
+          {
+            type: "normal",
+            class: "info",
+            tag: "Contact me",
+            content: "WX: 18091468805",
+          },
+        ];
+        Terminal.$api.pushMessage("my-terminal", messages);
+      }
+      success();
     },
   },
 ];
