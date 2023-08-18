@@ -56,23 +56,6 @@ onMounted(() => {
       type: "success",
       dangerouslyUseHTMLString: true,
     });
-    // axios
-    //   .get("/apiSohu/cityjson?ie=utf-8", {
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json;charset=UTF-8",
-    //     },
-    //   })
-    //   .then((res:any) => {
-    //     const info = res.data.substring(19, res.data.length - 1);
-    //     const address = JSON.parse(info).cname;
-    //     ElNotification({
-    //       title: "欢迎访问",
-    //       message: `您好，来自${address}的游客，点击<el-button type="text" size="mini" style="color:rgb(121,187,255);cursor:pointer" id="goLoginBtn"> 此处 </el-button>登录/注册！本应用提供了命令行形式的登录方式，输入login体验！`,
-    //       type: "success",
-    //       dangerouslyUseHTMLString: true,
-    //     });
-    //   });
   }
   goLoginBtn = document.getElementById("goLoginBtn");
   goLoginBtn?.addEventListener("click", () => {
@@ -124,6 +107,10 @@ const onExecCmd = (
       }
       .t-window {
         background-color: rgba(100, 100, 100, 0.5) !important;
+        .t-log-box{
+          color: #fff;
+          mix-blend-mode:difference
+        }
         .t-cmd-line-content {
           font-size: 14px;
         }
