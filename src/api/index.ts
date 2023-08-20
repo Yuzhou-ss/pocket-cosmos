@@ -12,3 +12,6 @@ export const insertAccess = (params: any) => post("access/insertAccessRecord", p
 
 export const insertConsoleAccess = (params: any) => post("access/insertConsoleAccessRecord", params);
 
+export const setDefaultSearch = (params: any) => post("config/setDefaultSearch", params);
+
+export const getDefaultConfig = (params: any) => get("/config/getDefaultConfig",params)

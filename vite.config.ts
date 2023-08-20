@@ -3,11 +3,12 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from "path"
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-
+import topLevelAwait from 'vite-plugin-top-level-await'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [
     vue(),
     AutoImport({
@@ -15,6 +16,10 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+    }),
+    topLevelAwait({
+      promiseExportName: '__tla',
+      promiseImportName: i => `__tla_${i}`
     })
   ],
   resolve:{
@@ -37,5 +42,13 @@ export default defineConfig({
         changeOrigin: true
       }
     }
-  }
+  },
+  build: {
+    target: 'es2020'
+  },
+  optimizedeps: {
+    esbuildoptions: {
+      target: 'es2020'
+    }
+  },
 })

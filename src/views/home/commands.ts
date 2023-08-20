@@ -1,5 +1,5 @@
 import Terminal from "vue-web-terminal";
-import { loginRequest, setBgImage } from "@/api";
+import { loginRequest, setBgImage, setDefaultSearch } from "@/api";
 import { bgTypeListObj, bgTypeListArr } from "./bg";
 import {
   getRandomBg,
@@ -8,8 +8,11 @@ import {
 } from "@/api/orther/index";
 import { type commandType } from "./type";
 import moment from "moment";
+import { useMainStore } from '@/store'
 
+const mainStore = useMainStore()
 const app = document.getElementById("app");
+const searchCommand = ["百度","baidu","csdn","bilibili","哔哩哔哩"]
 
 export const commands: commandType[] = [
   // 百度搜索
@@ -150,7 +153,7 @@ export const commands: commandType[] = [
       let asker = new Terminal.$Ask();
       success(asker);
       asker.ask({
-        question: "Please input your username: ",
+        question: `Please input your username:`,
         autoReview: true,
         callback: (username: string) => {
           asker.ask({
@@ -163,12 +166,13 @@ export const commands: commandType[] = [
                 class: "system",
                 tag: "waiting",
                 content: "Logging in...",
-              })
-              try{
+              });
+              try {
                 const result: any = await loginRequest({ username, password });
                 if (result.status === 1) {
                   localStorage.setItem("username", result.data.username);
                   localStorage.setItem("nickname", result.data.nickname);
+                  mainStore.changeUserInfo(result.data.username, result.data.nickname)
                   success({
                     type: "normal",
                     class: "success",
@@ -178,8 +182,8 @@ export const commands: commandType[] = [
                 } else {
                   failed("Login failed!");
                 }
-              }catch{
-                failed("Something wrong!")
+              } catch {
+                failed("Something wrong!");
               }
               asker.finish();
             },
@@ -204,6 +208,7 @@ export const commands: commandType[] = [
           if (input.toLowerCase() === "y") {
             localStorage.removeItem("username");
             localStorage.removeItem("nickname");
+            mainStore.changeUserInfo(null, null)
             success({
               type: "normal",
               class: "success",
@@ -280,12 +285,14 @@ export const commands: commandType[] = [
         return failed("Something wrong!");
       }
       if (input === "--set") {
+        if (!localStorage.getItem("username")) {
+          return failed("You haven't logged in yet!");
+        }
         let message = {
           class: "info",
           content: "Loading ...",
         };
         Terminal.$api.pushMessage("my-terminal", message);
-
         const bgImgUrl = app?.style.backgroundImage.split(`"`)[1];
         const result: any = await setBgImage({ bgImgUrl });
         if (result.data.status === 1) {
@@ -388,6 +395,58 @@ export const commands: commandType[] = [
         Terminal.$api.pushMessage("my-terminal", messages);
       }
       success();
+    },
+  },
+  {
+    key: "search",
+    callback: async (input: string, success: Function, failed: Function) => {
+      if (!localStorage.getItem("username")) {
+        return failed("You haven't logged in yet!");
+      }
+      let inputs: string[] = input.split(" ");
+      let newInput:string[] = []
+      inputs.map((item) : any => {
+        if (item !== "") {
+          newInput.push(item);
+        }
+      });
+      if(newInput[0] === "--set"){
+        if(newInput.length !== 2 || searchCommand.indexOf(newInput[1].toLowerCase()) < 0){
+          return failed("Please enter the correct parameter!")
+        }
+        try{
+          const result:any = await setDefaultSearch({defaultSerch:newInput[1],username:localStorage.getItem('username')})
+          if(result.status === 1) {
+            mainStore.changeUserInfo(localStorage.getItem("username"), localStorage.getItem("nickname"))
+            success({
+              type: "normal",
+              class: "success",
+              tag: "success",
+              content: `Default Set ${newInput[1]}!`,
+            });
+          }
+        }catch{
+          failed("Something wrong!")
+        }
+      }
+      if(newInput[0] === "--reset"){
+        if(newInput.length !== 1){
+          return failed("Please enter the correct parameter!")
+        }
+        try{
+          const result:any = await setDefaultSearch({defaultSerch:null,username:localStorage.getItem('username')})
+          if(result.status === 1) {
+            success({
+              type: "normal",
+              class: "success",
+              tag: "success",
+              content: `Default Reset!`,
+            });
+          }
+        }catch{
+          failed("Something wrong!")
+        }
+      }
     },
   },
 ];

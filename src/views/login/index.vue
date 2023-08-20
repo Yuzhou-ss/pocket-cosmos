@@ -124,7 +124,9 @@ import { loginRequest, signupRequest } from "@/api";
 import { reactive, ref } from "vue";
 import { type FormInstance, type FormRules } from 'element-plus';
 import { useRouter } from "vue-router";
+import { useMainStore } from '@/store'
 
+const mainStore = useMainStore()
 const router = useRouter();
 
 // 判断动画的flag
@@ -266,6 +268,7 @@ const login = (formEl: FormInstance | undefined) => {
         loginSuccess.value = true;
         localStorage.setItem("username", result.data.username);
         localStorage.setItem("nickname", result.data.nickname);
+        mainStore.changeUserInfo(result.data.username, result.data.nickname)
         setTimeout(() => {
           return router.push("/home");
         }, 500);
