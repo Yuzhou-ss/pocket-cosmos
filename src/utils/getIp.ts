@@ -1,13 +1,9 @@
-import { getIp } from "@/api/orther";
-
 export const getIpInfo = async () => {
   try {
-    const result: any = await getIp();
-    const info = result.substring(19, result.length - 1);
-    const ip = JSON.parse(info).cip;
-    const location = JSON.parse(info).cname;
-    return { ip, location };
+    let ip = window.location.host.split(":")[0]
+    let location = ""
+    return {ip , location}
   } catch (error) {
-    console.error(error);
+    return {ip:'127.0.0.1',location:"未知"}
   }
 };

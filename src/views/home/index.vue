@@ -6,6 +6,7 @@
       class="my-terminal"
       :command-store="commandList"
       :init-log="intLog"
+      :title="`Custom Terminal${nickname ? nickname : ''}`"
     >
       <template #helpBox="{ item }">
         <el-card shadow="always" class="helpBox" v-if="item">
@@ -33,14 +34,18 @@
                 >
                   <el-divider style="margin: 8px 0" v-if="index != 0" />
                   <div class="help-exp-content-item-box">
-                    <div><el-tag effect="light">dcs{{ index+1 }}</el-tag></div>
+                    <div>
+                      <el-tag effect="light">dcs{{ index + 1 }}</el-tag>
+                    </div>
                     <div>
                       <p class="help-exp-content-item-content">{{ exp.des }}</p>
                     </div>
                   </div>
                   <div class="help-exp-content-item-box">
                     <div>
-                      <el-tag effect="light" type="success">cmd{{ index+1 }}</el-tag>
+                      <el-tag effect="light" type="success"
+                        >cmd{{ index + 1 }}</el-tag
+                      >
                     </div>
                     <div>
                       <p class="help-exp-content-item-content">{{ exp.cmd }}</p>
@@ -57,15 +62,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { commands, keyList } from "./commands";
 import { useRouter } from "vue-router";
 import { commandList } from "./commandList";
 import moment from "moment";
 import { type msgType } from "./type";
 import { getIpInfo } from "@/utils/getIp";
-import { insertAccess, getDefaultConfig } from "@/api";
-import "@/utils/console";
+import {insertAccess, getDefaultConfig } from "@/api";
+// import "@/utils/console";
 import { useMainStore } from "@/store";
 
 const mainStore = useMainStore();
@@ -118,7 +123,7 @@ const getConfig = async () => {
 };
 getConfig();
 
-onMounted(() => {
+onMounted(async () => {
   if (localStorage.getItem("nickname")) {
     ElNotification({
       title: "欢迎访问",
@@ -138,10 +143,13 @@ onMounted(() => {
     router.push("/login");
   });
 
-  const ipInfo = getIpInfo();
+  const ipInfo = await getIpInfo();
   insertAccessRecord(ipInfo);
 });
 
+const nickname = computed(() => {
+  return mainStore.$state.nickname;
+});
 const insertAccessRecord = async (params: any) => {
   try {
     await insertAccess(params);
@@ -159,6 +167,7 @@ mainStore.$subscribe(async (mutation, state) => {
         if (result.data.defaultSearch) {
           defaultSearch.value = result.data.defaultSearch;
         }
+        console.log(defaultSearch.value);
         if (result.data.bgImgUrl) {
           app?.setAttribute(
             "style",
@@ -188,7 +197,7 @@ mainStore.$subscribe(async (mutation, state) => {
 // });
 
 const onExecCmd = (
-  key:any,
+  key: any,
   command: string,
   success: Function,
   failed: Function
@@ -200,15 +209,16 @@ const onExecCmd = (
     commandArr.shift();
     command = commandArr.length > 1 ? commandArr.join(" ") : commandArr[0];
   }
-  // 根据命令列表判断命令是否合法
-  if (!keyList.includes(key.toLowerCase()) && defaultSearch.value)
-    return failed(
-      `Command <span style="font-weight:1000;color:rgb(255,255,0)">${key}</span> is not defined!`
-    );
 
   if (!keyList.includes(key.toLowerCase())) {
-    command = originCommand;
-    key = defaultSearch.value;
+    if (defaultSearch.value && defaultSearch.value !== "null") {
+      command = originCommand;
+      key = defaultSearch.value;
+    } else {
+      return failed(
+        `Command <span style="font-weight:1000;color:rgb(255,255,0)">${key}</span> is not defined!`
+      );
+    }
   }
   // 执行对应的回调
   commands.find((item) => {
@@ -227,18 +237,27 @@ const onExecCmd = (
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  .my-terminal ::v-deep {
+  :deep(.my-terminal) {
     background-color: transparent !important;
     .terminal {
       .t-header-container {
         .t-header {
-          background-color: rgba(149, 149, 152, 0.5) !important;
+          background-color: rgba(49, 49, 49, 0.8) !important;
         }
       }
       .t-window {
-        background-color: rgba(100, 100, 100, 0.5) !important;
+        background-color: rgba(49, 49, 49, 0.6) !important;
+        div {
+          font-size: inherit;
+        }
         .t-log-box {
           color: #fff;
+          font-size: 14px;
+        }
+        .t-last-line {
+          span {
+            font-size: 14px;
+          }
         }
         .t-cmd-line-content {
           font-size: 14px;
@@ -253,7 +272,7 @@ const onExecCmd = (
       }
     }
   }
-  .helpBox ::v-deep {
+  :deep(.helpBox) {
     position: absolute;
     right: 15px;
     top: 40px;
@@ -269,7 +288,7 @@ const onExecCmd = (
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 5px;
-      background: rgba(44,62,138,.5);
+      background: rgba(44, 62, 138, 0.5);
     }
     .el-card__header {
       padding: 5px;

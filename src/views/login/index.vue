@@ -122,11 +122,11 @@
 <script setup lang="ts">
 import { loginRequest, signupRequest } from "@/api";
 import { reactive, ref } from "vue";
-import { type FormInstance, type FormRules } from 'element-plus';
+import { type FormInstance, type FormRules } from "element-plus";
 import { useRouter } from "vue-router";
-import { useMainStore } from '@/store'
+import { useMainStore } from "@/store";
 
-const mainStore = useMainStore()
+const mainStore = useMainStore();
 const router = useRouter();
 
 // 判断动画的flag
@@ -237,7 +237,7 @@ const go = () => {
 const signup = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
-      const result:any = await signupRequest(signForm);
+      const result: any = await signupRequest(signForm);
       if (result.status === 1) {
         ElMessage({
           type: "success",
@@ -263,12 +263,16 @@ const signup = (formEl: FormInstance | undefined) => {
 const login = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
-      const result:any = await loginRequest(loginForm);
+      const result: any = await loginRequest(loginForm);
       if (result.status === 1) {
         loginSuccess.value = true;
         localStorage.setItem("username", result.data.username);
         localStorage.setItem("nickname", result.data.nickname);
-        mainStore.changeUserInfo(result.data.username, result.data.nickname)
+        mainStore.changeUserInfo(
+          result.data.username,
+          result.data.nickname,
+          result.data.defaultSearch
+        );
         setTimeout(() => {
           return router.push("/home");
         }, 500);
@@ -408,7 +412,7 @@ const login = (formEl: FormInstance | undefined) => {
     }
   }
 
-  .el-carousel ::v-deep {
+  :deep(.el-carousel) {
     .el-carousel__container {
       height: 100%;
     }
@@ -447,13 +451,13 @@ const login = (formEl: FormInstance | undefined) => {
 .input {
   width: 100%;
 }
-.el-input ::v-deep {
+:deep(.el-input) {
   .el-input__wrapper {
     border-radius: 0;
     box-shadow: none;
   }
 }
-.b-border ::v-deep {
+:deep(.b-border) {
   margin-bottom: 30px;
   .el-form-item__content {
     border: 1px solid black;

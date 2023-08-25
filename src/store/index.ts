@@ -11,9 +11,10 @@ export const useMainStore = defineStore('main', {
   getters: {
   },
   actions: {
-    changeUserInfo(username:string | null, nickname:string | null){
+    changeUserInfo(username:string | null, nickname:string | null, defaultSearch: string | null){
         this.username = username
         this.nickname = nickname
+        this.defaultSearch = defaultSearch
     }
   },
 })

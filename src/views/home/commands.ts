@@ -172,7 +172,7 @@ export const commands: commandType[] = [
                 if (result.status === 1) {
                   localStorage.setItem("username", result.data.username);
                   localStorage.setItem("nickname", result.data.nickname);
-                  mainStore.changeUserInfo(result.data.username, result.data.nickname)
+                  mainStore.changeUserInfo(result.data.username, result.data.nickname, result.data.defaultSearch)
                   success({
                     type: "normal",
                     class: "success",
@@ -184,8 +184,9 @@ export const commands: commandType[] = [
                 }
               } catch {
                 failed("Something wrong!");
+              }finally{
+                asker.finish();
               }
-              asker.finish();
             },
           });
         },
@@ -208,13 +209,22 @@ export const commands: commandType[] = [
           if (input.toLowerCase() === "y") {
             localStorage.removeItem("username");
             localStorage.removeItem("nickname");
-            mainStore.changeUserInfo(null, null)
+            mainStore.changeUserInfo(null, null, null)
             success({
               type: "normal",
               class: "success",
               tag: "success",
               content: `Logout succeeded!`,
             });
+          }else if(input.toLowerCase() === "n"){
+            success({
+              type: "normal",
+              class: "info",
+              tag: "system",
+              content: `Request canceled!`,
+            });
+          }else{
+            failed("Bad inputs!");
           }
           asker.finish();
         },
@@ -417,7 +427,8 @@ export const commands: commandType[] = [
         try{
           const result:any = await setDefaultSearch({defaultSerch:newInput[1],username:localStorage.getItem('username')})
           if(result.status === 1) {
-            mainStore.changeUserInfo(localStorage.getItem("username"), localStorage.getItem("nickname"))
+            localStorage.setItem("defaultSearch", newInput[1])
+            mainStore.changeUserInfo(localStorage.getItem("username"), localStorage.getItem("nickname"), newInput[1])
             success({
               type: "normal",
               class: "success",
@@ -436,6 +447,8 @@ export const commands: commandType[] = [
         try{
           const result:any = await setDefaultSearch({defaultSerch:null,username:localStorage.getItem('username')})
           if(result.status === 1) {
+            localStorage.setItem("defaultSearch", "")
+            mainStore.changeUserInfo(localStorage.getItem("username"), localStorage.getItem("nickname"), null)
             success({
               type: "normal",
               class: "success",
