@@ -195,7 +195,7 @@ const signRules = {
     { validator: checkPassord, trigger: "blur" },
   ],
   nickname: [
-    { min: 3, max: 9, message: "昵称长度为3~9个字符", trigger: "blur" },
+    { min: 2, max: 9, message: "昵称长度为2~9个字符", trigger: "blur" },
     { validator: checkNickname, trigger: "blur" },
   ],
 };
@@ -238,7 +238,7 @@ const signup = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
       const result: any = await signupRequest(signForm);
-      if (result.status === 1) {
+      if (result.state === 200) {
         ElMessage({
           type: "success",
           message: "注册成功！",
@@ -247,7 +247,7 @@ const signup = (formEl: FormInstance | undefined) => {
       } else {
         ElMessage({
           type: "warning",
-          message: result.message,
+          message: result.message || '未知错误',
         });
       }
     } else {
@@ -264,14 +264,16 @@ const login = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
       const result: any = await loginRequest(loginForm);
-      if (result.status === 1) {
+      if (result.state === 200) {
         loginSuccess.value = true;
         localStorage.setItem("username", result.data.username);
         localStorage.setItem("nickname", result.data.nickname);
+        localStorage.setItem("id", result.data.id);
         mainStore.changeUserInfo(
           result.data.username,
           result.data.nickname,
-          result.data.defaultSearch
+          result.data.defaultSearch,
+          result.data.id
         );
         setTimeout(() => {
           return router.push("/home");
@@ -301,6 +303,8 @@ const login = (formEl: FormInstance | undefined) => {
   height: 100%;
   width: 100%;
   position: relative;
+  background-image: url('@/assets/images/bg.jpg');
+  background-size: 100% 100%;
   .choose-box {
     position: absolute;
     left: 50%;

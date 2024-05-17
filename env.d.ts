@@ -4,3 +4,11 @@ declare module "*.vue" {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
+
+// *.d.ts文件中
+declare interface Window {
+  mozRequestAnimationFrame: any;
+  webkitRequestAnimationFrame: any;
+  msRequestAnimationFrame: any;
+  oRequestAnimationFrame: any;
+}

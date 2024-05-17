@@ -1,8 +1,8 @@
 import { get } from "./ortherHttp";
-import { bgTypeIndexList } from "@/views/home/bg";
+import { bgTypeIndexList } from "@/components/terminal-window/bg";
 
 
-export const getCategory = () => get("/intf/getCategory", {});
+export const getCategory = () =>  get("/intf/getCategory", {});
 
 export const getRandomBg = () => {
   const randomType: string =

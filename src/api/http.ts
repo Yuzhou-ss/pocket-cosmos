@@ -24,16 +24,12 @@ api.interceptors.response.use(
   }
 );
 
-
-
-export function get(url:string, params:any) {
+export function get(url: string, params?: any) {
   return new Promise((resolve, reject) => {
     api
-      .get(url, {
-        params: params,
-      })
+      .get(url, params)
       .then((res) => {
-        resolve(res.data);
+        resolve(res?.data || res);
       })
       .catch((err) => {
         reject(err);
@@ -41,18 +37,19 @@ export function get(url:string, params:any) {
   });
 }
 
-export function post(url:string, params:any){
-    return new Promise((resolve,reject) => {
-        api.post(url, {
-            params:params
-        }).then(res => {
-          if(res){
-            resolve(res.data)
-          }else{
-            reject()
-          }
-        }).catch(err=>{
-            reject(err)
-        })
-    })
+export function post(url: string, params: any) {
+  return new Promise((resolve, reject) => {
+    api
+      .post(url, params)
+      .then((res) => {
+        if (res) {
+          resolve(res?.data || res);
+        } else {
+          reject();
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }

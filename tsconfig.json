@@ -24,7 +24,8 @@
     "src/**/*.vue",
     "*.ts",
     // 解决element-plus假报错问题
-    "element-plus.d.ts"
+    "element-plus.d.ts",
+    "src/utils/sakura-snow.js"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

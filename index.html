@@ -2,13 +2,47 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Custom Terminal</title>
+    <link
+      rel="shortcut icon"
+      href="/src/assets/1.png"
+      type="image/x-icon"
+      id="ico"
+    />
+    <title id="title">Custom terminal</title>
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/c/font_4173165_2g4t5a6pg9v.css"
+    />
+    <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
+    <script src="./echarts.min.js"></script>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
-    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        serviceHost: "http://129.28.65.99:3001/_AMapService",
+        securityJsCode:'7b26526f31adcfd73baa7fae556366db'
+      };
+    </script>
+    <script
+      type="text/javascript"
+      src="https://webapi.amap.com/maps?v=2.0&key=bb4f5ab713febc0d7029da4bf1228efa"
+    ></script>
+    <script>
+      window.onload = function () {
+        const ico = document.getElementById("ico");
+        const title = document.getElementById("title");
+        window.addEventListener("focus", () => {
+          ico.href = "/assets/1.png";
+          title.innerText = "Custom terminal";
+        });
+        window.addEventListener("blur", () => {
+          ico.href = "/assets/2.png";
+          title.innerText = "摆烂一会儿~";
+        });
+      };
+    </script>
   </body>
 </html>

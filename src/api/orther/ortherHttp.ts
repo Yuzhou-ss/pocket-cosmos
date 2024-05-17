@@ -32,7 +32,7 @@ export function get(url:string, params:any | undefined) {
         params: params,
       })
       .then((res) => {
-        resolve(res.data);
+        resolve(res?.data || res);
       })
       .catch((err) => {
         reject(err);
