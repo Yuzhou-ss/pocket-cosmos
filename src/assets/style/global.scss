@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "CustomFont";
+  src: url("@/assets/font/ZhaiZaiJiaFenTiaoTian-2.ttf");
+}
+@font-face {
+  font-family: "CustomFont-2";
+  src: url("@/assets/font/HuXiaoBoSaoBaoTi-2.otf");
+}
+@font-face {
+  font-family: "UbuntuMono";
+  src: url("@/assets/font/UbuntuMono-B-1.ttf");
+}
+@font-face{
+  font-family: 'jiayouya';
+  src: url("@/assets/font/JinNianYeYaoJiaYouYa-2.ttf")
+}
+@font-face {
+  font-family: 'yunfeng';
+  src: url('@/assets/font/YunFengHanChanTi-2.ttf');
+}
+
+@font-face {
+  font-family: 'dianying';
+  src: url('@/assets/font/dianyingzimuti-2.ttf');
+}
+* {
+  padding: 0;
+  margin: 0;
+
+}
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+}

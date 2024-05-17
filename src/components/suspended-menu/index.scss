@@ -1,0 +1,168 @@
+.menu-wrapper {
+  z-index: 100000;
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  bottom: -30px;
+  border-radius: 50%;
+  transition: all 0.3s ease-out;
+  left: 50%;
+  transform: translateX(-50%);
+  &:hover {
+    width: 200px;
+    border-radius: 10px;
+    bottom: 0;
+  }
+  .icon-box{
+    display: flex;
+    flex-direction: column;
+    .icon{
+      animation: bounce-down 1.5s linear infinite;
+    }
+  }
+  ul {
+    display: flex;
+    li {
+      height: 60px;
+      /* flex:1是让所有的li平均分nav这个容器 */
+      flex: 1;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      transition: all 0.4s linear;
+      span {
+        /* 进行定位，使之通过span元素带动矢量图标进行水平垂直到中心位置 */
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 9px;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        /* 设置鼠标移入的样式 */
+        cursor: pointer;
+        /* 设置动画过度事件以及延迟 */
+        transition: 0.5s;
+        transition-delay: 0s;
+        &::before {
+          content: "";
+          position: absolute;
+          top: 10px;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: orange;
+          border-radius: 50%;
+          filter: blur(40px);
+          opacity: 0;
+          transition: 0.5s;
+          transition-delay: 0s;
+        }
+        &::before {
+          opacity: 0.5;
+          transition-delay: 0.25s;
+        }
+        i {
+          /* 针对图标大小进行设置 */
+          display: flex;
+          color: #222327;
+          font-size: 2em;
+        }
+      }
+
+      &.active {
+        span {
+          /* 设置了一开始的背景颜色，后面会被取代，设置了点击的时候会向上移动 */
+          background: orange;
+          transform: translateY(-27px);
+          transition-delay: 0.25s;
+          background: var(--clr);
+          i {
+            color: #fff;
+          }
+          &::before {
+            background: var(--clr);
+          }
+        }
+      }
+    }
+  }
+  .indicator {
+    /* 这里进行了定位，并且设置了背景园的位置，同时将圆的背景颜色与背景颜色设为一致，会形成那种向下突兀的圆形，并且加入了动画 */
+    position: absolute;
+    top: -35px;
+    // width: 70.5px;
+    height: 70px;
+    background: transparent;
+    border-radius: 50%;
+    z-index: 1;
+    transition: 0.3s;
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   top: 16px;
+    //   left: 50px;
+    //   width: 10px;
+    //   height: 5px;
+    //   background: transparent;
+    //   border-radius: 50%;
+    //   box-shadow: 20px 19px 0 4px #fff;
+    // }
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   top: 16px;
+    //   left: -34px;
+    //   width: 10px;
+    //   height: 5px;
+    //   background: transparent;
+    //   border-radius: 50%;
+    //   box-shadow: 20.5px 19px 0 4px #fff;
+    // }
+  }
+  li:nth-child(1).active ~ .indicator {
+    transform: translateX(calc(70px * 0));
+  }
+
+  li:nth-child(2).active ~ .indicator {
+    transform: translateX(calc(70px * 1));
+  }
+
+  li:nth-child(3).active ~ .indicator {
+    transform: translateX(calc(70px * 2));
+  }
+
+  li:nth-child(4).active ~ .indicator {
+    transform: translateX(calc(70px * 3));
+  }
+
+  li:nth-child(5).active ~ .indicator {
+    transform: translateX(calc(70px * 4));
+  }
+}
+
+@keyframes bounce-down {
+  25% {
+    transform: translateY(-3px);
+  }
+
+  50% {
+    transform: translateY(0);
+  }
+
+  75% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

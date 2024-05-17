@@ -1,0 +1,134 @@
+#terminal {
+  height: 100%;
+  width: 100%;
+  :deep(.my-terminal) {
+    background-color: transparent !important;
+    .terminal {
+      font-family: dianying;
+      height: 60%;
+      .t-header-container {
+        .t-header {
+          background-color: rgba(49, 49, 49, 0.8) !important;
+          line-height: 18px;
+        }
+      }
+      .t-window {
+        background-color: rgba(49, 49, 49, 0.6) !important;
+        div {
+          font-size: 14px;
+          font-family: dianying;
+        }
+        .t-log-box {
+          color: #fff;
+          font-size: 14px;
+          .rotateImg {
+            animation: rotate 1s linear infinite;
+          }
+        }
+        .t-last-line {
+          span {
+            font-size: 14px;
+            font-family: dianying;
+          }
+        }
+        .t-cmd-line-content {
+          font-size: 14px;
+          font-family: dianying;
+        }
+        .t-table,
+        .t-table tbody,
+        .t-table td,
+        .t-table thead,
+        .t-table tr {
+          padding: 5px 10px;
+        }
+        .t-border-dashed {
+          div {
+            div {
+              padding: 5px 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  :deep(.helpBox) {
+    position: absolute;
+    right: 15px;
+    top: 40px;
+    max-height: calc(100% - 60px);
+    z-index: 99;
+    padding: 5px;
+    overflow: auto;
+    max-width: 50%;
+    font-family: Monaco, Menlo, Consolas, monospace;
+    background-color: rgba(152, 156, 225, 0.6);
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: rgba(44, 62, 138, 0.5);
+    }
+    .el-card__header {
+      padding: 5px;
+      font-size: 14px;
+      .card-header {
+        text-align: center;
+        height: 20px;
+      }
+    }
+
+    .el-card__body {
+      padding: 5px;
+      font-size: 14px;
+      .help-item {
+        margin-top: 10px;
+        .el-tag {
+          color: #000;
+        }
+        .help-content {
+          margin-left: 5px;
+        }
+      }
+      .help-exps {
+        display: flex;
+        .help-exp-content {
+          margin-left: 10px;
+          .help-exp-content-item .help-exp-content-item-box {
+            display: flex;
+            padding: 5px;
+            .help-exp-content-item-content {
+              margin-left: 5px;
+              line-height: 24px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.my-terminal{
+  animation: flyInBottom 0.2s linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flyInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
