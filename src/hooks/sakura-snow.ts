@@ -154,7 +154,7 @@ export const useSakura = async (className: string) => {
     document.getElementsByClassName(className)[0].appendChild(canvas);
     cxt = canvas.getContext("2d");
     const sakuraList = new SakuraList();
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 70; i++) {
       const randomX = getRandom("x") as number;
       const randomY = getRandom("y") as number;
       const randomR = getRandom("r") as number;

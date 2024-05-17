@@ -17,7 +17,6 @@ import { onMounted, ref } from 'vue'
 // import { defineAsyncComponent } from "vue";
 // const Weather = defineAsyncComponent(() => import ('@/components/weather/index.vue'))
 
-
 const weather = ref('')
 
 const setWeather = () => {
@@ -32,7 +31,6 @@ const setWeather = () => {
       useSnow('terminal-container')
     }
     else {
-      console.log(111)
       useSakura('terminal-container')
     }
   }).catch(err => {
