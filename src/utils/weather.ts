@@ -10,8 +10,10 @@ export const getCityWeather = () => {
           // 查询成功，result即为当前所在城市信息
           const res = await getWeather(result.city);
           return resolve(res);
+        } else {
+          const res = await getWeather("苏州市");
+          return resolve(res);
         }
-        return reject(result);
       });
     });
   });

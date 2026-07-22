@@ -53,3 +53,20 @@ export function post(url: string, params: any) {
       });
   });
 }
+
+export function del(url: string, params?: any) {
+  return new Promise((resolve, reject) => {
+    api
+      .delete(url, params)
+      .then((res) => {
+        if (res) {
+          resolve(res?.data || res);
+        } else {
+          reject();
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}

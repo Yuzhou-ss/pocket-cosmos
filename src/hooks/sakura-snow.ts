@@ -1,9 +1,8 @@
-import { onBeforeUnmount, onMounted, onUnmounted } from "vue";
+import { onBeforeUnmount } from "vue";
 import sakura from "@/assets/images/sakura.png";
 
 export const useSakura = async (className: string) => {
-  let stop = null;
-  let staticx = null;
+  let stop: number | null = null;
   const img = new Image();
   img.src = sakura;
   const getRandom = (option: string): number | Function => {
@@ -139,11 +138,11 @@ export const useSakura = async (className: string) => {
       window.mozRequestAnimationFrame ||
       window.webkitRequestAnimationFrame ||
       window.msRequestAnimationFrame ||
-      window.oRequestAnimationFrame;
+      window.oRequestAnimationFrame ||
+      ((callback) => setTimeout(callback, 1000 / 60)); // fallback
 
     let canvas = document.createElement("canvas"),
       cxt: any;
-    staticx = true;
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
     canvas.setAttribute(
@@ -151,8 +150,14 @@ export const useSakura = async (className: string) => {
       "position: fixed;left: 0;top: 0;pointer-events: none;"
     );
     canvas.setAttribute("id", "canvas_sakura");
-    document.getElementsByClassName(className)[0].appendChild(canvas);
+    canvas?.setAttribute("class", "weather_canvas");
+
+    const container = document.getElementsByClassName(className)[0];
+    if (!container) return;
+    container.appendChild(canvas);
+
     cxt = canvas.getContext("2d");
+
     const sakuraList = new SakuraList();
     for (let i = 0; i < 70; i++) {
       const randomX = getRandom("x") as number;
@@ -173,25 +178,34 @@ export const useSakura = async (className: string) => {
       sakuraList.push(sakura);
     }
     stop = requestAnimationFrame(function f() {
+      if (!canvas || !cxt) return;
+
       cxt.clearRect(0, 0, canvas.width, canvas.height);
-      // 修改樱花位置逻辑
       sakuraList.update();
-      // 画出修改后的樱花
       sakuraList.draw(cxt);
-      // 递归 修改位置, 画出修改后的樱花
-      stop = requestAnimationFrame(f);
+
+      // 关键优化：只有在未停止的情况下继续动画
+      if (stop !== null) {
+        stop = requestAnimationFrame(f);
+      }
     });
   };
 
-  onMounted(() => {
-    startSakura();
-  });
+  const stopSakura = () => {
+    if (stop !== null) {
+      cancelAnimationFrame(stop);
+      stop = null;
+    }
+    const canvas = document.getElementById("canvas_sakura");
+    if (canvas && canvas.parentNode) {
+      canvas.parentNode.removeChild(canvas);
+    }
+  };
+
+  startSakura();
 
   onBeforeUnmount(() => {
-    stop = null;
-    const ctx = document.getElementById("canvas_sakura");
-    document
-      .getElementsByClassName(className)[0]
-      .removeChild(ctx as HTMLElement);
+    stopSakura();
   });
+  return stopSakura;
 };

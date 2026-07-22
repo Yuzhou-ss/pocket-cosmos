@@ -1,37 +1,53 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_UR),
   routes: [
     {
       path: "/",
-      redirect: "/terminal",
+      redirect: "/yuzhou/navigation",
     },
     {
-      path: "/login",
+      path: "/yuzhou/login",
       name: "login",
       component: () => import("@/views/login/index.vue"),
     },
     {
-      path: "/terminal",
+      path: "/yuzhou/terminal",
       name: "terminal",
       component: () => import("@/views/terminal/index.vue"),
     },
     {
-      path: "/home",
+      path: "/yuzhou/home",
       name: "home",
       component: () => import("@/views/home/index.vue"),
     },
     {
-      path: "/about",
+      path: "/yuzhou/about",
       name: "about",
       component: () => import("@/views/about/index.vue"),
     },
     {
-      path: "/ppt",
-      name: "ppt",
-      component: () => import("@/views/ppt/index.vue"),
+      path: "/yuzhou/navigation",
+      name: "navigation",
+      component: () => import("@/views/navigation/index.vue"),
     },
+    {
+      path: "/yuzhou/productRoadmap",
+      name: "productRoadmap",
+      component: () => import("@/views/productRoadmap.vue"),
+    },
+    {
+      path: "/yuzhou/windowTerminal",
+      name: "productRoadmap",
+      component: () => import("@/views/windowsTerminal/index.vue"),
+    },
+    {
+      path: "/yuzhou/404",
+      name: "404",
+      component: () => import("@/views/404.vue"),
+    },
+    
   ],
 });
 

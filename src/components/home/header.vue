@@ -1,6 +1,6 @@
 <template>
   <div class="header-container">
-    <div class="signature" data-text="温粥客">温粥客</div>
+    <div class="signature" data-text="余粥">余粥</div>
     <div class="log">
       <img src="@/assets/images/logo.gif" alt="">
     </div>

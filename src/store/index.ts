@@ -1,20 +1,13 @@
-import { defineStore } from "pinia"
+// src/store/index.ts
+import { createPinia } from "pinia";
+import type { App } from "vue";
 
-export const useMainStore = defineStore('main', {
-  state: () => {
-    return {
-        username:localStorage.getItem("username"),
-        nickname:localStorage.getItem("nickname"),
-        defaultSearch:localStorage.getItem("defaultSearch")
-    }
-  },
-  getters: {
-  },
-  actions: {
-    changeUserInfo(username:string | null, nickname:string | null, defaultSearch: string | null, userId: string | null){
-        this.username = username
-        this.nickname = nickname
-        this.defaultSearch = defaultSearch
-    }
-  },
-})
+const pinia = createPinia();
+
+export const setupStore = (app: App) => {
+  app.use(pinia);
+};
+
+export { useUserStore } from "./modules/user";
+export { useSearchStore } from "./modules/search";
+export { useNavBgStore } from "./modules/navbg";

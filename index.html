@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="shortcut icon"
-      href="/src/assets/1.png"
+      href="/home/src/assets/1.png"
       type="image/x-icon"
       id="ico"
     />
-    <title id="title">Custom terminal</title>
+    <title id="title"></title>
     <link
       rel="stylesheet"
       href="//at.alicdn.com/t/c/font_4173165_2g4t5a6pg9v.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&display=swap"
+      rel="stylesheet"
+    />
+
     <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
     <script src="./echarts.min.js"></script>
   </head>
@@ -23,7 +28,7 @@
     <script type="text/javascript">
       window._AMapSecurityConfig = {
         serviceHost: "http://129.28.65.99:3001/_AMapService",
-        securityJsCode:'7b26526f31adcfd73baa7fae556366db'
+        securityJsCode: "7b26526f31adcfd73baa7fae556366db",
       };
     </script>
     <script
@@ -31,16 +36,18 @@
       src="https://webapi.amap.com/maps?v=2.0&key=bb4f5ab713febc0d7029da4bf1228efa"
     ></script>
     <script>
+      const nickName = localStorage.getItem("nickname") || "先生";
       window.onload = function () {
         const ico = document.getElementById("ico");
         const title = document.getElementById("title");
+        title.innerText = `哈喽，${nickName}！`;
         window.addEventListener("focus", () => {
-          ico.href = "/assets/1.png";
-          title.innerText = "Custom terminal";
+          ico.href = "/home/assets/2.png";
+          title.innerText = "休息一会儿~";
         });
         window.addEventListener("blur", () => {
-          ico.href = "/assets/2.png";
-          title.innerText = "摆烂一会儿~";
+          ico.href = "/home/assets/1.png";
+          title.innerText = `哈喽，${nickName}！`;
         });
       };
     </script>

@@ -63,19 +63,27 @@ export const useRain = (className: string) => {
     canvas.setAttribute(
       "style",
       "position: fixed;left: 0;top: 0;pointer-events: none;z-index: 1"
-      
     );
     canvas.setAttribute("id", "canvas_sakura");
-    const ctx = canvas.getContext('2d')
+    canvas?.setAttribute("class", "weather_canvas");
+    const ctx = canvas.getContext("2d");
     start(ctx);
   };
 
-  onMounted(() => {
-    startRain()
-  })
+  // onMounted(() => {
+  //   startRain()
+  // })
+  startRain();
 
-  onBeforeUnmount(() => {
+  const stopRain = () => {
     const ctx = document.getElementById("canvas_sakura");
-    document.getElementsByClassName(className)[0].removeChild(ctx as HTMLElement);
-  })
+    document
+      .getElementsByClassName(className)[0]
+      .removeChild(ctx as HTMLElement);
+  };
+  onBeforeUnmount(() => {
+    stopRain;
+  });
+
+  return stopRain;
 };

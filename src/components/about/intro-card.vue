@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="name">温粥客</div>
+    <div class="name">余粥</div>
   </div>
 </template>
 
@@ -44,7 +44,7 @@ const leftTagsList = [
     icon: "cv",
   },
   {
-    text: "机械工人",
+    text: "机械系强者",
     icon: "machine",
   },
 ];
@@ -59,7 +59,7 @@ const rightTagsList = [
     icon: "money",
   },
   {
-    text: "丁克主义",
+    text: "本人超帅",
     icon: "dog",
   },
   {

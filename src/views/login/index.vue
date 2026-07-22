@@ -1,4 +1,4 @@
-/** * @auther 温粥客 * @desc 注册/登录页 */
+/** * @auther 余粥 * @desc 注册/登录页 */
 <template>
   <div class="login-box">
     <div class="choose-box" :class="loginSuccess ? 'chooseSuccess' : ''">
@@ -122,11 +122,11 @@
 <script setup lang="ts">
 import { loginRequest, signupRequest } from "@/api";
 import { reactive, ref } from "vue";
-import { type FormInstance, type FormRules } from "element-plus";
+import type { FormInstance, FormRules } from "element-plus/es/components/form";
 import { useRouter } from "vue-router";
-import { useMainStore } from "@/store";
+import { useUserStore } from "@/store";
 
-const mainStore = useMainStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 // 判断动画的flag
@@ -238,7 +238,7 @@ const signup = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
       const result: any = await signupRequest(signForm);
-      if (result.state === 200) {
+      if (result.status === 1) {
         ElMessage({
           type: "success",
           message: "注册成功！",
@@ -247,7 +247,7 @@ const signup = (formEl: FormInstance | undefined) => {
       } else {
         ElMessage({
           type: "warning",
-          message: result.message || '未知错误',
+          message: result.message || "未知错误",
         });
       }
     } else {
@@ -264,19 +264,20 @@ const login = (formEl: FormInstance | undefined) => {
   formEl?.validate(async (valid: boolean) => {
     if (valid) {
       const result: any = await loginRequest(loginForm);
-      if (result.state === 200) {
+      if (result.status === 1) {
         loginSuccess.value = true;
         localStorage.setItem("username", result.data.username);
         localStorage.setItem("nickname", result.data.nickname);
         localStorage.setItem("id", result.data.id);
-        mainStore.changeUserInfo(
+        userStore.changeUserInfo(
           result.data.username,
           result.data.nickname,
           result.data.defaultSearch,
-          result.data.id
+          result.data.id,
+          result.data.defaultWeather
         );
         setTimeout(() => {
-          return router.push("/home");
+          return router.push("/yuzhou/home");
         }, 500);
       } else {
         return ElMessage({
@@ -303,7 +304,7 @@ const login = (formEl: FormInstance | undefined) => {
   height: 100%;
   width: 100%;
   position: relative;
-  background-image: url('@/assets/images/bg.jpg');
+  background-image: url("@/assets/images/bg.jpg");
   background-size: 100% 100%;
   .choose-box {
     position: absolute;

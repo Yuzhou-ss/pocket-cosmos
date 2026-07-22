@@ -192,4 +192,38 @@ export const commandList:commandDesType[] = [
       }
     ],
   },
+  {
+    key: "weather",
+    title: "Weather",
+    group: "weather",
+    usage: "weather [param1] [param2]",
+    description: "设置天气效果，若未设置则默认根据当前时刻和地区的天气来呈现天气效果",
+    example: [
+      {
+        des: "查看支持的天气效果",
+        cmd: "search -l",
+      },
+      {
+        des: "设置天气效果为snow，设置后天气效果切换为下雪天",
+        cmd: "search --set snow",
+      },
+      {
+        des: "重置默认天气效果",
+        cmd: "search --reset",
+      }
+    ],
+  },
+   {
+    key: "cmd",
+    title: "cmd",
+    group: "cmd",
+    usage: "cmd",
+    description: "在web环境中打开本地终端",
+    example: [
+      {
+        des: "打开本地终端",
+        cmd: "cmd",
+      }
+    ],
+  },
 ];

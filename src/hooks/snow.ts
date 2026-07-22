@@ -4,7 +4,7 @@ export const useSnow = (className: string) => {
   let stop: any;
   const img = new Image();
   img.src = snowImg;
-  const num = 500;
+  const num = 800;
   const w = window.innerWidth;
   const h = window.innerHeight;
 
@@ -88,6 +88,7 @@ export const useSnow = (className: string) => {
       "position: fixed;left: 0;top: 0;pointer-events: none;"
     );
     canvas.setAttribute("id", "canvas_snow");
+    canvas?.setAttribute("class", "weather_canvas");
     document.getElementsByClassName(className)[0].appendChild(canvas);
     cxt = canvas.getContext("2d");
     const snowList = new SnowList();
@@ -107,14 +108,19 @@ export const useSnow = (className: string) => {
     });
   };
 
-  onMounted(() => {
-    startSnow();
-  });
+  // onMounted(() => {
+  // });
+  startSnow();
 
-  onBeforeUnmount(() => {
+  const stopSnow = () => {
     const ctx = document.getElementById("canvas_snow");
     document
       .getElementsByClassName(className)[0]
       .removeChild(ctx as HTMLElement);
+  };
+  onBeforeUnmount(() => {
+    stopSnow();
   });
+
+  return stopSnow;
 };

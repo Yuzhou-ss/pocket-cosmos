@@ -1,6 +1,11 @@
 import Terminal from "vue-web-terminal";
-import { loginRequest, setBgImage, setDefaultSearch } from "@/api";
-import { bgTypeListObj, bgTypeListArr } from "./bg";
+import {
+  loginRequest,
+  setBgImage,
+  setDefaultSearch,
+  setdefaultWeather,
+} from "@/api";
+import { initBgCategory } from "./bg";
 import {
   getRandomBg,
   getRandomBgByType,
@@ -8,11 +13,19 @@ import {
 } from "@/api/orther/index";
 import { type commandType } from "./type";
 import moment from "moment";
-import { useMainStore } from "@/store";
+import { useUserStore } from "@/store";
 import router from "@/router";
-
-const mainStore = useMainStore();
+const userStore = useUserStore();
 const searchCommand = ["百度", "baidu", "csdn", "bilibili", "哔哩哔哩"];
+const weatherTypes = ["snow", "sakura", "rain"];
+
+const { bgTypeListObj, bgTypeListArr } = await initBgCategory();
+import bus from "@/utils/bus";
+const weatherTypesList = [
+  [1, "snow"],
+  [2, "sakura"],
+  [3, "rain"],
+];
 
 export const commands: commandType[] = [
   // 百度搜索
@@ -154,8 +167,7 @@ export const commands: commandType[] = [
   {
     key: "login",
     callback: (input: string, success: Function, failed: Function) => {
-      if (localStorage.getItem("username"))
-        return failed("您已经登录");
+      if (localStorage.getItem("username")) return failed("您已经登录");
       let asker = new Terminal.$Ask();
       success(asker);
       asker.ask({
@@ -175,24 +187,25 @@ export const commands: commandType[] = [
               });
               try {
                 const result: any = await loginRequest({ username, password });
-                if (result.state === 200) {
+                if (result.status === 1) {
                   localStorage.setItem("username", result.data.username);
                   localStorage.setItem("id", result.data.id);
                   localStorage.setItem("nickname", result.data.nickname);
-                  mainStore.changeUserInfo(
+                  userStore.changeUserInfo(
                     result.data.username,
                     result.data.nickname,
                     result.data.defaultSearch,
                     result.data.id,
+                    result.data.defaultWeather
                   );
-                  success({
+                  return success({
                     type: "normal",
                     class: "success",
                     tag: "success",
                     content: `登录成功！欢迎访问， ${result.data.nickname}.`,
                   });
                 } else {
-                  failed("登录失败");
+                  return failed("登录失败");
                 }
               } catch {
                 failed("系统错误，执行 help 获取帮助");
@@ -221,7 +234,7 @@ export const commands: commandType[] = [
           if (input.toLowerCase() === "y") {
             localStorage.removeItem("username");
             localStorage.removeItem("nickname");
-            mainStore.changeUserInfo(null, null, null, null);
+            userStore.changeUserInfo(null, null, null, null, null);
             success({
               type: "normal",
               class: "success",
@@ -229,7 +242,7 @@ export const commands: commandType[] = [
               content: `已退出登录`,
             });
           } else if (input.toLowerCase() === "n") {
-            success({
+            return success({
               type: "normal",
               class: "info",
               tag: "system",
@@ -324,7 +337,7 @@ export const commands: commandType[] = [
           bgImgUrl,
           username: localStorage.getItem("username"),
         });
-        if (result.state === 200) {
+        if (result.status === 1) {
           return success({
             type: "normal",
             class: "success",
@@ -356,7 +369,12 @@ export const commands: commandType[] = [
           bgImgUrl,
           username: localStorage.getItem("username"),
         });
-        if (result.state === 200) {
+        if (result.status === 1) {
+          const app = document.getElementsByClassName("terminal-container")[0];
+          app?.setAttribute(
+            "style",
+            `background-image:url('./bg7.jpg') !important`
+          );
           return success({
             type: "normal",
             class: "success",
@@ -416,42 +434,23 @@ export const commands: commandType[] = [
         let messages = [
           {
             type: "normal",
-            class: "info",
-            tag: "System",
-            content: `欢迎来到温粥客开发的自定义Web终端， 当前访问时间为 <span style="color:rgb(0,255,255);font-weight:1000"> ${moment().format(
+            class: "success",
+            tag: "Hello World!",
+            content: `你好哇！`,
+          },
+          {
+            type: "normal",
+            class: "success",
+            tag: "Bgein",
+            content: `欢迎来到温粥客开发的自定义Web终端， 当前访问时间 <span style="color:#70c000;font-weight:1000"> ${moment().format(
               "YYYY-MM-DD HH:mm:ss"
             )}</span>.`,
           },
           {
             type: "normal",
-            class: "warning",
-            tag: "Attention",
-            content: `如果你觉得这个这个应用的实用性不强, 请 <span style="color:rgb(0,255,255);font-weight:1000">嘴下留情</span>.`,
-          },
-          {
-            type: "normal",
-            class: "warning",
-            tag: "Becsuse",
-            content:
-              "我只是觉得这很有趣",
-          },
-          {
-            type: "normal",
-            class: "info",
-            tag: "Author",
-            content: "温粥客",
-          },
-          {
-            type: "normal",
-            class: "info",
-            tag: "Birthday",
-            content: "1999-09",
-          },
-          {
-            type: "normal",
             class: "info",
             tag: "Contact me",
-            content: "微信: IltcatZ",
+            content: "18091468805",
           },
         ];
         Terminal.$api.pushMessage("my-terminal", messages);
@@ -485,13 +484,14 @@ export const commands: commandType[] = [
             defaultSearch: newInput[1],
             username: localStorage.getItem("username"),
           });
-          if (result.state === 200) {
+          if (result.status === 1) {
             localStorage.setItem("defaultSearch", newInput[1]);
-            mainStore.changeUserInfo(
+            userStore.changeUserInfo(
               localStorage.getItem("username"),
               localStorage.getItem("nickname"),
               newInput[1],
               localStorage.getItem("userId"),
+              localStorage.getItem("defaultWeather")
             );
             success({
               type: "normal",
@@ -514,13 +514,14 @@ export const commands: commandType[] = [
             defaultSearch: null,
             username: localStorage.getItem("username"),
           });
-          if (result.state === 200) {
+          if (result.status === 1) {
             localStorage.setItem("defaultSearch", "");
-            mainStore.changeUserInfo(
+            userStore.changeUserInfo(
               localStorage.getItem("username"),
               localStorage.getItem("nickname"),
               null,
-              localStorage.getItem("userId")
+              localStorage.getItem("userId"),
+              localStorage.getItem("defaultWeather")
             );
             success({
               type: "normal",
@@ -533,6 +534,12 @@ export const commands: commandType[] = [
           failed("系统错误，执行 help 获取帮助");
         }
       }
+      return success({
+        type: "normal",
+        class: "error",
+        tag: "error",
+        content: `系统错误，执行 help 获取帮助`,
+      });
     },
   },
   // about
@@ -542,7 +549,7 @@ export const commands: commandType[] = [
       if (input !== "" && input !== "about") {
         return failed("系统错误，执行 help 获取帮助");
       } else {
-        router.push("/about");
+        router.push("/yuzhou/about");
       }
       success({
         type: "normal",
@@ -553,14 +560,163 @@ export const commands: commandType[] = [
     },
   },
   {
-    key:'个人情况',
-    callback:(input:string, success: Function, failed:Function) => {
-      success({
-        type: "html",
-        content: "",
+    key: "weather",
+    callback: async (input: string, success: Function, failed: Function) => {
+      let inputs: string[] = input.split(" ");
+      let newInput: string[] = [];
+      inputs.map((item): any => {
+        if (item !== "") {
+          newInput.push(item);
+        }
       });
-    }
-  }
+      if (newInput[0] === "--set") {
+        let message = {
+          class: "info",
+          content: "天气效果切换中...",
+        };
+        Terminal.$api.pushMessage("my-terminal", message);
+        if (
+          newInput.length !== 2 ||
+          !weatherTypes.includes(newInput[1].toLowerCase())
+        ) {
+          return failed("参数错误，执行 help 获取帮助");
+        }
+        try {
+          const result: any = await setdefaultWeather({
+            id: localStorage.getItem("id"),
+            defaultWeather: newInput[1],
+            username: localStorage.getItem("username"),
+          });
+          if (result.status === 1) {
+            localStorage.setItem("defaultWeather", newInput[1]);
+            userStore.changeUserInfo(
+              localStorage.getItem("username"),
+              localStorage.getItem("nickname"),
+              localStorage.getItem("defaultSearch"),
+              localStorage.getItem("userId"),
+              newInput[1]
+            );
+            return success({
+              type: "normal",
+              class: "success",
+              tag: "success",
+              content: `默认天气效果已设置为 ${newInput[1]}！刷新生效`,
+            });
+          }
+        } catch {
+          return failed("系统错误，执行 help 获取帮助");
+        }
+      }
+      if (newInput[0] === "-l") {
+        return success({
+          type: "table",
+          content: {
+            head: ["id", "weather"],
+            rows: weatherTypesList,
+          },
+        });
+      }
+      if (newInput[0] === "--stop") {
+        let message = {
+          class: "info",
+          content: "天气效果qingc中...",
+        };
+        const weatherCanvas =
+          document.getElementsByClassName("weather_canvas")[0];
+        const terminal = document.getElementById("terminal-container");
+        if (weatherCanvas) {
+          (terminal as any).removeChild(weatherCanvas);
+        }
+        Terminal.$api.pushMessage("my-terminal", message);
+        if (newInput.length !== 1) {
+          return failed("参数错误，执行 help 获取帮助");
+        }
+        try {
+          const result: any = await setdefaultWeather({
+            id: localStorage.getItem("id"),
+            defaultWeather: "no-weather",
+            username: localStorage.getItem("username"),
+          });
+          if (result.status === 1) {
+            localStorage.setItem("defaultSearch", "no-weather");
+            userStore.changeUserInfo(
+              localStorage.getItem("username"),
+              localStorage.getItem("nickname"),
+              localStorage.getItem("defaultSearch"),
+              localStorage.getItem("userId"),
+              "no-weather"
+            );
+            return success({
+              type: "normal",
+              class: "success",
+              tag: "success",
+              content: `默认天气效果已清除，请刷新生效`,
+            });
+          }
+        } catch {
+          return failed("系统错误，执行 help 获取帮助");
+        }
+      }
+      if (newInput[0] === "--reset") {
+        let message = {
+          class: "info",
+          content: "天气效果重置中...",
+        };
+        Terminal.$api.pushMessage("my-terminal", message);
+        if (newInput.length !== 1) {
+          return failed("参数错误，执行 help 获取帮助");
+        }
+        try {
+          const result: any = await setdefaultWeather({
+            id: localStorage.getItem("id"),
+            defaultWeather: null,
+            username: localStorage.getItem("username"),
+          });
+          if (result.status === 1) {
+            localStorage.setItem("defaultSearch", "");
+            userStore.changeUserInfo(
+              localStorage.getItem("username"),
+              localStorage.getItem("nickname"),
+              localStorage.getItem("defaultSearch"),
+              localStorage.getItem("userId"),
+              null
+            );
+            return success({
+              type: "normal",
+              class: "success",
+              tag: "success",
+              content: `默认天气效果已重置，请刷新生效`,
+            });
+          }
+        } catch {
+          return failed("系统错误，执行 help 获取帮助");
+        }
+      }
+      return success({
+        type: "normal",
+        class: "error",
+        tag: "error",
+        content: `系统错误，执行 help 获取帮助`,
+      });
+    },
+  },
+  {
+    key: "cmd",
+    callback: async (input: string, success: Function, failed: Function) => {
+      const idContainer = document.getElementById("windows-terminal");
+      if (idContainer) {
+        bus.emit("hidden-windows-terminal");
+      } else {
+        bus.emit("show-windows-terminal", true);
+      }
+      success({
+        type: "normal",
+        class: "success",
+        tag: "success",
+        content: "终端已打开",
+      });
+    },
+  },
 ];
 
 let getKeylist = (): Array<string> => {

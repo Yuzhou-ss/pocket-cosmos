@@ -1,18 +1,18 @@
 @font-face {
-  font-family: "CustomFont";
-  src: url("@/assets/font/ZhaiZaiJiaFenTiaoTian-2.ttf");
+  font-family: 'CustomFont';
+  src: url('@/assets/font/ZhaiZaiJiaFenTiaoTian-2.ttf');
 }
 @font-face {
-  font-family: "CustomFont-2";
-  src: url("@/assets/font/HuXiaoBoSaoBaoTi-2.otf");
+  font-family: 'CustomFont-2';
+  src: url('@/assets/font/HuXiaoBoSaoBaoTi-2.otf');
 }
 @font-face {
-  font-family: "UbuntuMono";
-  src: url("@/assets/font/UbuntuMono-B-1.ttf");
+  font-family: 'UbuntuMono';
+  src: url('@/assets/font/UbuntuMono-B-1.ttf');
 }
-@font-face{
+@font-face {
   font-family: 'jiayouya';
-  src: url("@/assets/font/JinNianYeYaoJiaYouYa-2.ttf")
+  src: url('@/assets/font/JinNianYeYaoJiaYouYa-2.ttf');
 }
 @font-face {
   font-family: 'yunfeng';
@@ -26,7 +26,6 @@
 * {
   padding: 0;
   margin: 0;
-
 }
 a {
   text-decoration: none;
@@ -40,4 +39,96 @@ body,
 #app {
   height: 100%;
   width: 100%;
+}
+
+/* 在全局样式文件中 */
+.el-dialog {
+  background-color: rgb(245, 245, 245) !important;
+  padding: 0 !important;
+  border-radius: 16px !important;
+  transition: all .1s linear;
+}
+
+.el-dialog__header {
+  background-color: rgb(245, 245, 245) !important;
+  padding: 5px !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.el-dialog__body {
+  background-color: rgb(245, 245, 245) !important;
+  padding: 0 20px;
+}
+
+.el-dialog__footer {
+  background-color: rgb(245, 245, 245) !important;
+  padding: 0 20px 20px 20px;
+  border-radius: 16px !important;
+}
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, .1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+  margin-bottom: 8px;
+}
+
+.hover-dialog {
+  transform: rotate3d(1, 1, 0, 10deg);
+}
+
+.el-button{
+  border: none !important;
+  color: #70c000;
+}
+
+.el-button--primary{
+  background-color: #70c000 !important;
+  color: #fff;
+}
+
+.jittery {
+  animation: jittery 2s linear;
+}
+@keyframes jittery {
+  5%,
+  50% {
+    transform: scale(1);
+  }
+
+  10% {
+    transform: scale(0.9);
+  }
+
+  15% {
+    transform: scale(1.15);
+  }
+
+  20% {
+    transform: scale(1.15) rotate(-5deg);
+  }
+
+  25% {
+    transform: scale(1.15) rotate(5deg);
+  }
+
+  30% {
+    transform: scale(1.15) rotate(-3deg);
+  }
+
+  35% {
+    transform: scale(1.15) rotate(2deg);
+  }
+
+  40% {
+    transform: scale(1.15) rotate(0);
+  }
 }

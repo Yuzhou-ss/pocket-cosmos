@@ -2,7 +2,7 @@
   <div class="skill-card">
     <div class="title">
       <svg-icon name="skill" width="30px" height="30px"></svg-icon>
-      <span style="font-size: 30px;">技能</span>
+      <span style="font-size: 30px">技能</span>
     </div>
     <div class="tags-container">
       <div
@@ -153,8 +153,8 @@ const go = (url) => {
   animation: flyInBottom 0.5s linear;
   border-radius: 10px;
   font-family: CustomFont-2;
-  z-index:2;
-  .title{
+  z-index: 2;
+  .title {
     display: flex;
     align-items: center;
   }
@@ -183,6 +183,9 @@ const go = (url) => {
         animation: jittery 2s infinite;
       }
     }
+  }
+  .text {
+    color: #fff;
   }
 }
 

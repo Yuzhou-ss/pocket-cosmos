@@ -5,7 +5,7 @@
     </div>
     <div class="card">
       <div class="content">
-        <h2>温粥客</h2>
+        <h2>余粥</h2>
         <span>所望隔山海，山海不睡觉</span>
         <!-- <ul>
           <li>

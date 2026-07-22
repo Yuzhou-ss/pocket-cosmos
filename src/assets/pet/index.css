@@ -1,0 +1,10 @@
+/* 鼠标样式开始 */
+body {
+  cursor: url(./Maxwell_Who-CatCursor/pointer.ico), default;
+}
+
+a,
+img,
+button {
+  cursor: url(./Maxwell_Who-CatCursor/alternate.ico), default;
+}

@@ -8,23 +8,21 @@
       <!-- 基本信息 -->
       <h2 class="content-title" style="margin-top: 1em">我</h2>
       <p class="content-text">理工男</p>
-      <p class="content-text">一个入职半年的职场萌新</p>
-      <p class="content-text">
+      <!-- <p class="content-text">一个入职两年半的职场萌新</p> -->
+      <!-- <p class="content-text">
         破壳日：<psw>{{ birthday }}</psw>
-      </p>
+      </p> -->
       <p class="content-text">
         年龄：<psw>{{ age }}</psw>
       </p>
       <p class="content-text" style="margin-bottom: 3em">
-        十六型人格测试：<psw class="mask-text">调停者</psw>
+        MBTI：<psw class="mask-text">INFJ</psw>
       </p>
 
       <!-- 性格 -->
-      <h2 class="content-title">性格</h2>
-      <p class="content-text">期待未来，怀疑自己</p>
-      <p class="content-text" style="margin-bottom: 3em">
-        所望隔山海，山海不睡觉
-      </p>
+      <h2 class="content-title">日常</h2>
+      <p class="content-text">喜欢美女，贪恋钱财，崇尚自由</p>
+      <p class="content-text" style="margin-bottom: 3em">存在主义危机</p>
 
       <!-- 联系方式 -->
       <h2 class="content-title">联系方式</h2>
@@ -66,15 +64,15 @@ age.value = getAge(birthday);
   box-sizing: border-box;
   animation: flyInBottom 0.5s linear;
   border-radius: 10px;
-  z-index:2;
+  z-index: 2;
   .title {
     display: flex;
     align-items: center;
     font-family: CustomFont-2;
   }
   .content {
-    font-family: jiayouya, UbuntuMono, "Varela Round", "PingFang SC",
-      "Microsoft YaHei";
+    font-family:
+      jiayouya, UbuntuMono, "Varela Round", "PingFang SC", "Microsoft YaHei";
     .content-title {
       font-size: 28px;
       font-weight: 700;
@@ -85,7 +83,6 @@ age.value = getAge(birthday);
     }
   }
 }
-
 
 @keyframes flyInBottom {
   from {
